@@ -4,4 +4,4 @@ transformers
 underthesea
 numpy
 pandas
-sklearn
+scikit-learn

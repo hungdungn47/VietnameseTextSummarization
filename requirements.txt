@@ -1,5 +1,4 @@
 torch
-pickle
 rouge
 re
 transformers

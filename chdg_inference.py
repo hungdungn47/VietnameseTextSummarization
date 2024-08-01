@@ -411,8 +411,9 @@ model = End2End_Encoder(768, 1024, 4, dropout_p=0.3).to(device)
 model.load_state_dict(torch.load('./e_25_0.3071.mdl', map_location=device), strict=False)
 c_model.load_state_dict(torch.load('./c_25_0.3071.mdl', map_location=device), strict=False)
 
-def infer(full_text, category): 
-    docs = [text.strip() for text in full_text.split('<><><><><>')]
+def infer(docs, category): 
+    # docs = [text.strip() for text in full_text.split('<><><><><>')]
+    docs = [text.strip() for text in docs]
     data_tree = loadClusterData(docs, category)
     summ = val_e2e(data_tree, model, c_model=c_model, max_word_num=200)
     summ = re.sub(r'\s+([.,;:"?()/!?])', r'\1', summ.replace('_', ' '))

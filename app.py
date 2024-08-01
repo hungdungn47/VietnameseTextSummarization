@@ -16,6 +16,8 @@ def summarize():
         st.write(summ)
         st.subheader("Docs: ")
         st.write(docs)
+        with open('./log.txt', 'w', encoding='utf-8') as f:
+            f.write(docs)
     else:
         st.error("Hãy tải file văn bản lên")
 

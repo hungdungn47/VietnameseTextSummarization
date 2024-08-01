@@ -13,7 +13,7 @@ if 'docs' not in st.session_state:
 # Function to add a new text area
 def add_text_area():
     st.session_state.num_docs += 1
-    
+
 
 # Button to add a new text area
 st.button("Thêm văn bản", on_click=add_text_area)
@@ -21,6 +21,7 @@ st.button("Thêm văn bản", on_click=add_text_area)
 # Display text areas for document input
 for i in range(st.session_state.num_docs):
     doc = st.text_area(f"Văn bản {i+1}", key=f"doc_{i}", height=200)
+    doc.replace('\r', '\n')
     if len(st.session_state.docs) <= i:
         st.session_state.docs.append(doc)
     else:

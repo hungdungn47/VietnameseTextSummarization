@@ -16,6 +16,7 @@ def summarize():
         st.write(summ)
         st.subheader("Docs: ")
         st.write(docs)
+        print(docs)
         with open('./log.txt', 'w', encoding='utf-8') as f:
             f.write(docs)
     else:

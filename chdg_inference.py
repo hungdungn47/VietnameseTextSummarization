@@ -416,4 +416,4 @@ def infer(full_text, category):
     data_tree = loadClusterData(docs, category)
     summ = val_e2e(data_tree, model, c_model=c_model, max_word_num=200)
     summ = re.sub(r'\s+([.,;:"?()/!?])', r'\1', summ.replace('_', ' '))
-    return summ
+    return summ, docs

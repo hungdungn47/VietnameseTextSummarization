@@ -11,9 +11,11 @@ def summarize():
     if uploaded_file is not None:
         stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
         full_text = stringio.read()
-        summ = infer(full_text, category)
+        summ, docs = infer(full_text, category)
         st.subheader("Kết quả: ")
         st.write(summ)
+        st.subheader("Docs: ")
+        st.write(docs)
     else:
         st.error("Hãy tải file văn bản lên")
 

@@ -419,4 +419,4 @@ def infer(docs, category):
     data_tree, doc_sen_mask_shape, sec_sen_mask_shape, len_sents = loadClusterData(docs, category)
     summ = val_e2e(data_tree, model, c_model=c_model, max_word_num=200)
     summ = re.sub(r'\s+([.,;:"?()/!?])', r'\1', summ.replace('_', ' '))
-    return summ, docs, doc_sen_mask_shape, sec_sen_mask_shape, len_sents
+    return summ, docs, doc_sen_mask_shape, sec_sen_mask_shape, len_sents, data_tree.sent_text, data_tree.feature, data_tree.adj, data_tree.doc_lens

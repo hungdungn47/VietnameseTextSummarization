@@ -22,6 +22,7 @@ st.button("Thêm văn bản", on_click=add_text_area)
 for i in range(st.session_state.num_docs):
     doc = st.text_area(f"Văn bản {i+1}", key=f"doc_{i}", height=200)
     doc.replace('\r', '\n')
+    doc.replace("\"", "'")
     if len(st.session_state.docs) <= i:
         st.session_state.docs.append(doc)
     else:

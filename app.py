@@ -35,16 +35,6 @@ for i in range(st.session_state.num_docs):
 category = st.selectbox("Chọn chủ để của văn bản: ", ['Giáo dục', 'Giải trí - Thể thao', 'Khoa học - Công nghệ', 'Kinh tế', 'Pháp luật', 'Thế giới', 'Văn hóa - Xã hội', 'Đời sống'])
 
 def summarize():
-    # if uploaded_file is not None:
-    #     stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-    #     full_text = stringio.read()
-    #     summ, docs = infer(full_text, category)
-    #     st.subheader("Kết quả: ")
-    #     st.write(summ)
-    #     st.subheader("Docs: ")
-    #     st.write(docs)
-    # else:
-    #     st.error("Hãy tải file văn bản lên")
     summ, docs = infer(st.session_state.docs, category)
     st.subheader("Kết quả")
     st.write(summ)

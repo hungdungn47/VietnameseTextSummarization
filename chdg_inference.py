@@ -287,11 +287,8 @@ def meanTokenVecs(text):
             buffer, buffer_str = [], ''
         else:
             wordVecs[token[0]] = token[1]
-    
-    token_vecs = [vec for w, vec in wordVecs.items() if w not in string.punctuation]
-    if len(token_vecs) == 0:
-        return torch.zeros(768)
-    return torch.mean(torch.stack(token_vecs), dim=0)
+            
+    return torch.mean(torch.stack([vec for w, vec in wordVecs.items() if w not in string.punctuation]), dim=0)
 
 def getPositionEncoding(pos, d=768, n=10000):
     P = np.zeros(d)
@@ -302,7 +299,6 @@ def getPositionEncoding(pos, d=768, n=10000):
     return P
 
 PositionVec = torch.stack([torch.from_numpy(getPositionEncoding(i, d=768)) for i in range(200)], dim=0).float().to(device)
-
 stop_w = ['...']
 with open('./vietnamese-stopwords-dash.txt', 'r', encoding='utf-8') as f:
     for w in f.readlines():
@@ -351,9 +347,19 @@ def loadClusterData(docs_org, category): # docs_org: list of text for each docum
     for d, doc in enumerate(docs_org):
         seclist[d], sentTexts = divideSection(doc, category)
         docs.append(sentTexts)
-
+    
+    secnum = 0
+    for k, val_dict in seclist.items():
+        vals = set(val_dict.values())
+        for ki, vi in val_dict.items():
+            for i, v in enumerate(vals):
+                if vi == v:
+                    val_dict[ki] = i + secnum
+                    break
+        seclist[k] = val_dict
+        secnum += len(vals)
+    
     sents, sentVecs, secIDs, doc_lens = [], [], [], []
-    secnum = 4
     sentnum = sum([len(doc.values()) for doc in seclist.values()])
     doc_sec_mask = np.zeros((len(docs), secnum))
     sec_sen_mask = np.zeros((secnum, sentnum))
@@ -369,10 +375,8 @@ def loadClusterData(docs_org, category): # docs_org: list of text for each docum
             sentVecs.append(meanTokenVecs(sent))
             sec_sen_mask[seclist[d][s], cursent] = 1
             cursent += 1
-    # print(doc_sec_mask.shape)
-    # print(sec_sen_mask.shape)
-    # print(len(sents))
-    return Cluster(sents, sentVecs, doc_lens, doc_sec_mask, sec_sen_mask), doc_sec_mask.shape, sec_sen_mask.shape, len(sents)
+
+    return Cluster(sents, sentVecs, doc_lens, doc_sec_mask, sec_sen_mask)
 
 def val_e2e(data, model, max_word_num=200, c_model=None):
     model.eval()
@@ -419,7 +423,7 @@ c_model.load_state_dict(torch.load('./c_25_0.3071.mdl', map_location=device), st
 def infer(docs, category): 
     # docs = [text.strip() for text in full_text.split('<><><><><>')]
     docs = [text.strip() for text in docs]
-    data_tree, doc_sen_mask_shape, sec_sen_mask_shape, len_sents = loadClusterData(docs, category)
+    data_tree = loadClusterData(docs, category)
     summ = val_e2e(data_tree, model, c_model=c_model, max_word_num=200)
     summ = re.sub(r'\s+([.,;:"?()/!?])', r'\1', summ.replace('_', ' '))
-    return summ, docs, doc_sen_mask_shape, sec_sen_mask_shape, len_sents, data_tree.sent_text, data_tree.feature, data_tree.adj, data_tree.doc_lens
+    return summ, docs

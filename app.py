@@ -45,17 +45,9 @@ def summarize():
     #     st.write(docs)
     # else:
     #     st.error("Hãy tải file văn bản lên")
-    summ, docs, doc_sen_mask_shape, sec_sen_mask_shape, len_sents, data_tree_sent_text, data_tree_feature, data_tree_adj, data_tree_doc_lens = infer(st.session_state.docs, category)
+    summ, docs = infer(st.session_state.docs, category)
     st.subheader("Kết quả")
     st.write(summ)
     st.write(docs)
-    st.write("doc sen mask shape: ", doc_sen_mask_shape)
-    st.write("sec sen mask shape: ", sec_sen_mask_shape)
-    st.write("len sents: ", len_sents)
-    st.write("data tree sent text: ", data_tree_sent_text)
-    st.write("data tree feature", data_tree_feature)
-    st.write("data tree adj: ", data_tree_adj)
-    st.write("data tree doc lens", data_tree_doc_lens)
-
 if st.button("Tóm tắt"):
     summarize()

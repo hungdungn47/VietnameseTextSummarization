@@ -288,7 +288,10 @@ def meanTokenVecs(text):
         else:
             wordVecs[token[0]] = token[1]
     
-    return torch.mean(torch.stack([vec for w, vec in wordVecs.items() if w not in string.punctuation]), dim=0)
+    token_vecs = [vec for w, vec in wordVecs.items() if w not in string.punctuation]
+    if len(token_vecs) == 0:
+        return torch.zeros(768)
+    return torch.mean(torch.stack(token_vecs), dim=0)
 
 def getPositionEncoding(pos, d=768, n=10000):
     P = np.zeros(d)

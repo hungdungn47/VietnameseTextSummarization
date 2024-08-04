@@ -366,8 +366,10 @@ def loadClusterData(docs_org, category): # docs_org: list of text for each docum
             sentVecs.append(meanTokenVecs(sent))
             sec_sen_mask[seclist[d][s], cursent] = 1
             cursent += 1
-    
-    return Cluster(sents, sentVecs, doc_lens, doc_sec_mask, sec_sen_mask)
+    # print(doc_sec_mask.shape)
+    # print(sec_sen_mask.shape)
+    # print(len(sents))
+    return Cluster(sents, sentVecs, doc_lens, doc_sec_mask, sec_sen_mask), doc_sec_mask.shape, sec_sen_mask.shape, len(sents)
 
 def val_e2e(data, model, max_word_num=200, c_model=None):
     model.eval()
@@ -414,7 +416,7 @@ c_model.load_state_dict(torch.load('./c_25_0.3071.mdl', map_location=device), st
 def infer(docs, category): 
     # docs = [text.strip() for text in full_text.split('<><><><><>')]
     docs = [text.strip() for text in docs]
-    data_tree = loadClusterData(docs, category)
+    data_tree, doc_sen_mask_shape, sec_sen_mask_shape, len_sents = loadClusterData(docs, category)
     summ = val_e2e(data_tree, model, c_model=c_model, max_word_num=200)
     summ = re.sub(r'\s+([.,;:"?()/!?])', r'\1', summ.replace('_', ' '))
-    return summ, docs
+    return summ, docs, doc_sen_mask_shape, sec_sen_mask_shape, len_sents

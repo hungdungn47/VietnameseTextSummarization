@@ -34,5 +34,6 @@ def summarize():
     summ, _ = infer(st.session_state.docs, category)
     st.subheader("Kết quả")
     st.write(summ)
+    
 if st.button("Tóm tắt"):
     summarize()

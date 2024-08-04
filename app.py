@@ -27,17 +27,12 @@ for i in range(st.session_state.num_docs):
         st.session_state.docs.append(doc)
     else:
         st.session_state.docs[i] = doc
-# Display the documents for verification
-# st.write("**Entered Documents:**")
-# st.write(st.session_state.docs)
-# uploaded_file = st.file_uploader(label="Chọn file văn bản")
 
 category = st.selectbox("Chọn chủ để của văn bản: ", ['Giáo dục', 'Giải trí - Thể thao', 'Khoa học - Công nghệ', 'Kinh tế', 'Pháp luật', 'Thế giới', 'Văn hóa - Xã hội', 'Đời sống'])
 
 def summarize():
-    summ, docs = infer(st.session_state.docs, category)
+    summ, _ = infer(st.session_state.docs, category)
     st.subheader("Kết quả")
     st.write(summ)
-    st.write(docs)
 if st.button("Tóm tắt"):
     summarize()

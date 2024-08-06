@@ -17,7 +17,6 @@ if 'docs' not in st.session_state:
 def add_text_area():
     st.session_state.num_docs += 1
 
-
 # Button to add a new text area
 col1.button("Thêm văn bản", on_click=add_text_area)
 

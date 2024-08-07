@@ -1,11 +1,14 @@
 import streamlit as st
 from io import StringIO
 from chdg_inference import infer
+from infer_concat import vit5_infer
 
 st.set_page_config(layout="wide")
 st.title("Tóm tắt Đa văn bản Tiếng Việt")
 
-col1, col2 = st.columns([2.5, 1])
+col1, col2 = st.columns([1, 1])
+col2_title, = col2.columns(1)
+col2_chdg, col2_vit5 = col2.columns(2)
 
 # Initialize session state
 if 'num_docs' not in st.session_state:
@@ -34,8 +37,13 @@ category = col1.selectbox("Chọn chủ để của văn bản: ", ['Giáo dục
 
 def summarize():
     summ, _ = infer(st.session_state.docs, category)
-    col2.subheader("Kết quả")
-    col2.write(summ)
+    with col2.container():
+        col2_title.subheader("Kết quả: ")
+
+    with col2.container():
+        col2_chdg.write(summ)
+        summ_vit5 = vit5_infer(st.session_state.docs)
+        col2_vit5.write(summ_vit5)
     
 if col1.button("Tóm tắt"):
     summarize()

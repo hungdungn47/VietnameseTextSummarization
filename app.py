@@ -44,8 +44,8 @@ def summarize():
     with col2.container():
         col2_chdg.write("CHDG:")
         col2_chdg.write(summ)
-        # summ_vit5 = vit5_infer(st.session_state.docs)
-        # col2_vit5.write(summ_vit5)
+        summ_vit5 = vit5_infer(st.session_state.docs)
+        col2_vit5.write(summ_vit5)
     
 if col1.button("Tóm tắt"):
     summarize()
